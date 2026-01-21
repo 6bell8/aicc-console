@@ -25,7 +25,7 @@ AICC 콘솔 형태의 포트폴리오 프로젝트입니다.
 - `/board/dynnode/new` : 동적노드 작성
 - `/board/dynnode/[id]` : 동적노드 상세/실행
 
----
+----
 
 ## API (Route Handlers)
 > `route.ts` 기반으로 엔드포인트를 구성합니다.

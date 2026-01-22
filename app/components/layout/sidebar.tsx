@@ -42,7 +42,7 @@ const NAV: NavNode[] = [
     label: '게시판',
     icon: <Megaphone className="h-4 w-4" />,
     items: [
-      { label: '공지사항', href: '/board/notices' },
+      { label: '공지사항', href: '/board/notice' },
       { label: '동적노드 가이드', href: '/board/dynnode' },
       { label: '저작가이드', href: '/board/authoring-guide' },
     ],

@@ -1,11 +1,29 @@
 import type { DynNodePost } from '../types/dynnode';
 
-export async function getDynNodes(): Promise<{ items: DynNodePost[] }> {
-  const res = await fetch('/api/dynnode', { cache: 'no-store' });
+export type DynNodeListResponse = {
+  items: DynNodePost[];
+  total?: number;
+  page?: number;
+  pageSize?: number;
+  totalPages?: number;
+};
+
+// ✅ 목록 (기존 호출부: getDynNodes()도 OK / 페이징: getDynNodes({page,pageSize})도 OK)
+export async function getDynNodes(params?: { page?: number; pageSize?: number }): Promise<DynNodeListResponse> {
+  const page = params?.page ?? 1;
+  const pageSize = params?.pageSize ?? 10;
+
+  const qs = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
+
+  const res = await fetch(`/api/dynnode?${qs.toString()}`, { cache: 'no-store' });
   if (!res.ok) throw new Error('dynnode list fetch 실패');
   return res.json();
 }
 
+// ✅ 단건
 export async function getDynNode(id: string): Promise<{ post: DynNodePost }> {
   const res = await fetch(`/api/dynnode/${encodeURIComponent(id)}`, { cache: 'no-store' });
   if (!res.ok) throw new Error('dynnode get fetch 실패');
@@ -36,6 +54,6 @@ export async function deleteDynnode(id: string) {
   const res = await fetch(`/api/dynnode/${encodeURIComponent(id)}`, { method: 'DELETE' });
   const data = await res.json().catch(() => ({}));
 
-  if (!res.ok) throw new Error(data?.message || `DELETE failed (${res.status})`);
+  if (!res.ok) throw new Error((data as any)?.message || `DELETE failed (${res.status})`);
   return data as { ok: true; removed: number };
 }

@@ -9,7 +9,8 @@ export type BadgeVariant =
   // ✅ status variants
   | 'active'
   | 'paused'
-  | 'inactive';
+  | 'inactive'
+  | 'info';
 
 export function Badge({ className, variant = 'default', ...props }: React.HTMLAttributes<HTMLSpanElement> & { variant?: BadgeVariant }) {
   const variants: Record<BadgeVariant, string> = {
@@ -22,6 +23,7 @@ export function Badge({ className, variant = 'default', ...props }: React.HTMLAt
     active: 'bg-emerald-100 text-emerald-800',
     paused: 'bg-amber-100 text-amber-800',
     inactive: 'bg-slate-200 text-slate-800',
+    info: 'bg-indigo-100 text-indigo-800',
   };
 
   return <span className={cn('inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium', variants[variant], className)} {...props} />;

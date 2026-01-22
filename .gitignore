@@ -10,6 +10,11 @@
 !.yarn/releases
 !.yarn/versions
 
+# JetBrains
+.idea/
+*.iml
+
+
 # testing
 /coverage
 

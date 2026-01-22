@@ -1,9 +1,24 @@
 import { NextResponse } from 'next/server';
 import { createPost, listPosts } from '@/app/lib/dynnode/store';
 
-export async function GET() {
-  const items = await listPosts();
-  return NextResponse.json({ items }, { status: 200 });
+function clamp(n: number, min: number, max: number) {
+  return Math.min(Math.max(n, min), max);
+}
+
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const page = Math.max(1, Number(url.searchParams.get('page') ?? 1));
+  const pageSize = Math.min(50, Math.max(5, Number(url.searchParams.get('pageSize') ?? 10)));
+
+  const all = await listPosts();
+  const total = all.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const safePage = Math.min(totalPages, Math.max(1, page));
+
+  const start = (safePage - 1) * pageSize;
+  const items = all.slice(start, start + pageSize);
+
+  return NextResponse.json({ items, total, page: safePage, pageSize, totalPages }, { status: 200 });
 }
 
 export async function POST(req: Request) {
